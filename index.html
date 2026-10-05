@@ -1,1044 +1,1387 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PustakaNusa - Toko Buku Online</title>
+  <style>
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --secondary: #0f172a;
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent-orange: #f97316;
+      --accent-green: #10b981;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius: 12px;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    /* ==========================================================================
+       NAVBAR
+       ========================================================================== */
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 450px;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.6rem 1rem 0.6rem 2.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      background-color: var(--bg-light);
+    }
+
+    .search-bar input:focus {
+      outline: 2px solid var(--primary);
+      background-color: #fff;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .cart-btn {
+      background-color: #e0e7ff;
+      color: var(--primary);
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    .cart-btn:hover {
+      background-color: #c7d2fe;
+    }
+
+    .cart-badge {
+      background-color: var(--accent-orange);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      font-weight: bold;
+    }
+
+    /* ==========================================================================
+       HERO BANNER
+       ========================================================================== */
+    .hero {
+      background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+      color: white;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      background-color: rgba(255,255,255,0.2);
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-btn {
+      background-color: var(--accent-orange);
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .hero-btn:hover {
+      background-color: #ea580c;
+    }
+
+    /* ==========================================================================
+       MAIN LAYOUT & CATEGORIES
+       ========================================================================== */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .category-filters {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cat-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      color: var(--text-dark);
+    }
+
+    .cat-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ==========================================================================
+       BOOK GRID & BOOK COVERS (CSS VECTOR COVERS)
+       ========================================================================== */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* CSS BOOK COVER (Substitusi gambar img tanpa internet) */
+    .book-cover {
+      height: 220px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset -5px 0 10px rgba(0,0,0,0.15);
+    }
+
+    .book-cover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 10px; height: 100%;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .cover-icon {
+      font-size: 2.5rem;
+      opacity: 0.85;
+      text-align: right;
+    }
+
+    .cover-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .cover-author {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-top: 0.2rem;
+    }
+
+    /* Cover Gradients per BUKU */
+    .bg-gradient-1 { background: linear-gradient(135deg, #d97706, #78350f); }
+    .bg-gradient-2 { background: linear-gradient(135deg, #2563eb, #1e3a8a); }
+    .bg-gradient-3 { background: linear-gradient(135deg, #059669, #064e3b); }
+    .bg-gradient-4 { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
+    .bg-gradient-5 { background: linear-gradient(135deg, #dc2626, #881337); }
+    .bg-gradient-6 { background: linear-gradient(135deg, #0891b2, #164e63); }
+
+    .book-info {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .book-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .rating {
+      color: #eab308;
+      font-weight: bold;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .price-main {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+
+    .price-slash {
+      font-size: 0.8rem;
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .add-cart-btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      padding: 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .add-cart-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* ==========================================================================
+       CART DRAWER (OFFCANVAS)
+       ========================================================================== */
+    .cart-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+    }
+
+    .cart-overlay.active {
+      display: block;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: -400px;
+      width: 100%;
+      max-width: 380px;
+      height: 100%;
+      background: white;
+      z-index: 201;
+      box-shadow: var(--shadow-lg);
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-drawer.active {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-btn {
+      background: none;
+      font-size: 1.25rem;
+      color: var(--text-muted);
+    }
+
+    .cart-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .cart-item-price {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .cart-qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    .qty-btn {
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-footer {
+      padding: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      background-color: var(--bg-light);
+    }
+
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background-color: var(--accent-green);
+      color: white;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .checkout-btn:hover {
+      background-color: #059669;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       MODAL CHECKOUT
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-header {
+      padding: 1rem 1.25rem;
+      background-color: var(--bg-light);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* ==========================================================================
+       TOAST NOTIFICATION
+       ========================================================================== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--secondary);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      z-index: 400;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* RESPONSIVE DESIGN FOR MOBILE HP */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.6rem; }
+      .book-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+      .book-cover { height: 170px; padding: 0.8rem; }
+      .cover-title { font-size: 0.9rem; }
+      .cover-icon { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <span>📚</span> PustakaNusa
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Cari judul buku atau penulis..." oninput="filterBooks()">
+      </div>
+      <button class="cart-btn" onclick="toggleCart(true)">
+        <span>🛒</span>
+        <span>Keranjang</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">🔥 Promo Hari Ini - Diskon 15%</span>
+      <h1>Temukan Buku Favoritmu Tanpa Batas</h1>
+      <p>Koleksi buku fiksi, teknologi, hingga pengembangan diri terbaik siap menemani hari-harimu.</p>
+      <button class="hero-btn" onclick="document.getElementById('katalog').scrollIntoView({behavior: 'smooth'})">Eksplorasi Katalog 👇</button>
+    </div>
+  </section>
+
+  <!-- MAIN CATALOG CONTENT -->
+  <main class="container" id="katalog">
+    <h2 class="section-title"><span>📖</span> Katalog Buku</h2>
+    
+    <!-- CATEGORY FILTERS -->
+    <div class="category-filters">
+      <button class="cat-btn active" onclick="setCategory('all', this)">Semua Kategori</button>
+      <button class="cat-btn" onclick="setCategory('Pengembangan Diri', this)">Pengembangan Diri</button>
+      <button class="cat-btn" onclick="setCategory('Fiksi', this)">Fiksi</button>
+      <button class="cat-btn" onclick="setCategory('Teknologi', this)">Teknologi</button>
+      <button class="cat-btn" onclick="setCategory('Bisnis', this)">Bisnis</button>
+    </div>
+
+    <!-- BOOK GRID -->
+    <div class="book-grid" id="bookGrid">
+      <!-- Cards rendered via JavaScript -->
+    </div>
+  </main>
+
+  <!-- CART DRAWER / OFFCANVAS -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>🛒 Keranjang Belanja</h3>
+      <button class="close-btn" onclick="toggleCart(false)">✖</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <!-- Cart items injected here -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="subtotalPrice">Rp 0</span>
+      </div>
+      <div class="cart-summary-row">
+        <span>PPN (11%)</span>
+        <span id="taxPrice">Rp 0</span>
+      </div>
+      <div class="cart-total-row">
+        <span>Total</span>
+        <span id="totalPrice" style="color: var(--primary);">Rp 0</span>
+      </div>
+      <button class="checkout-btn" onclick="openCheckoutModal()">Proses Checkout ➔</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📝 Form Pemesanan</h3>
+        <button class="close-btn" onclick="toggleCheckoutModal(false)">✖</button>
+      </div>
+      <div class="modal-body">
+        <form id="checkoutForm" onsubmit="handleCheckout(event)">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" required placeholder="Contoh: Budi Santoso">
+          </div>
+          <div class="form-group">
+            <label>Nomor WhatsApp</label>
+            Berikut adalah file `index.html` lengkap yang ditulis menggunakan **Pure CSS Inline & Internal (Zero Dependency)**. 
+
+### Kenapa Kode Ini Dijamin Bagus di HP (Acode) & Vercel:
+1. **Bisa Offline di Acode**: Tidak menggunakan CDN Tailwind, Bootstrap, atau FontAwesome external. Semua style CSS ditulis langsung di dalam tag `<style>`, sehingga saat di-preview di Acode **layout-nya langsung rapi, berwarna, dan responsif**.
+2. **Tanpa Gambar Luar**: Cover buku dibuat menggunakan **CSS Art & Gradient** + **Emoji Asli System (📚, 🛒, ⭐)**. Tidak akan ada lagi gambar pecah/patah saat dibuka di HP.
+3. **Siap Upload ke GitHub & Vercel**: Tinggal simpan file ini dengan nama `index.html`, lalu push ke GitHub dan deploy ke Vercel tanpa butuh konfigurasi build / node_modules sama sekali.
+
+---
+
+### File `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PustakaNusa - Toko Buku Online Terlengkap & Terpercaya</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: {
-                            800: '#1e293b',
-                            900: '#0f172a',
-                        },
-                        amber: {
-                            500: '#f59e0b',
-                            600: '#d97706',
-                        },
-                        coral: {
-                            500: '#f43f5e',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <title>PustakaNusa - Toko Buku Online</title>
     <style>
-        /* Custom Styles & Animation Effects */
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(12px);
+        /* --- RESET & BASIC STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .book-card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f59e0b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-        .book-card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding-bottom: 60px;
         }
-        .toast-enter {
-            animation: slideIn 0.3s ease-out forwards;
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; outline: none; }
+
+        /* --- CONTAINER --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
         }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            padding: 12px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: #f1f5f9;
+            font-size: 14px;
+        }
+
+        .search-box span {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        .cart-btn {
+            background: #eff6ff;
+            color: var(--primary);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+
+        .cart-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 2px;
+        }
+
+        /* --- HERO BANNER --- */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 32px 20px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+
+        .hero h1 { font-size: 24px; margin-bottom: 8px; }
+        .hero p { font-size: 14px; opacity: 0.9; margin-bottom: 16px; }
+        .hero-badge {
+            background: var(--secondary);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* --- CATEGORIES --- */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar { display: none; }
+
+        .cat-chip {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .cat-chip.active, .cat-chip:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* --- BOOK GRID --- */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+
+        .book-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        /* CSS BOOK COVER (TANPA GAMBAR EXTERNAL) */
+        .book-cover {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 12px;
+            color: white;
+            position: relative;
+            box-shadow: inset -4px 0 8px rgba(0,0,0,0.2), 2px 4px 10px rgba(0,0,0,0.15);
+            margin-bottom: 12px;
+        }
+
+        /* Color Themes for Covers */
+        .bg-blue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
+        .bg-emerald { background: linear-gradient(135deg, #065f46, #10b981); }
+        .bg-purple { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
+        .bg-amber { background: linear-gradient(135deg, #92400e, #f59e0b); }
+        .bg-rose { background: linear-gradient(135deg, #9f1239, #f43f5e); }
+        .bg-slate { background: linear-gradient(135deg, #334155, #64748b); }
+
+        .cover-tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            font-weight: 700;
+        }
+
+        .cover-title {
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .cover-author {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        .cover-spine {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .book-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-author {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .book-rating {
+            font-size: 12px;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .book-price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .book-price {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .add-btn {
+            background: var(--primary);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover { background: var(--primary-dark); }
+
+        /* --- CART DRAWER --- */
+        .cart-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 200;
+        }
+
+        .cart-overlay.active { display: block; }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0; right: -100%; bottom: 0;
+            width: 100%;
+            max-width: 380px;
+            background: white;
+            z-index: 201;
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+        }
+
+        .cart-drawer.active { right: 0; }
+
+        .cart-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            font-size: 20px;
+            background: none;
+            color: var(--text-muted);
+        }
+
+        .cart-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item-title { font-size: 13px; font-weight: 700; }
+        .cart-item-price { font-size: 13px; color: var(--primary); font-weight: 700; margin-top: 2px; }
+
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .qty-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            background: #f1f5f9;
+            font-weight: bold;
+        }
+
+        .cart-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            background: #f8fafc;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #10b981;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #0f172a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: 0.3s ease;
+            z-index: 300;
+            opacity: 0;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+<body>
 
     <!-- NAVBAR -->
-    <header class="sticky top-0 z-40 glass-nav text-white border-b border-slate-800 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                    <div class="bg-gradient-to-tr from-amber-500 to-amber-600 p-2.5 rounded-xl shadow-lg">
-                        <i class="fa-solid fa-book-open text-xl text-slate-900"></i>
-                    </div>
-                    <div>
-                        <span class="text-2xl font-black tracking-tight text-white">Pustaka<span class="text-amber-500">Nusa</span></span>
-                        <span class="block text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Toko Buku Online</span>
-                    </div>
-                </div>
-
-                <!-- Desktop Search Bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8">
-                    <div class="relative w-full">
-                        <input type="text" id="searchInputDesktop" oninput="handleSearch(this.value)" 
-                            placeholder="Cari judul buku, penulis, atau topik..." 
-                            class="w-full bg-slate-800/80 text-sm text-slate-100 placeholder-slate-400 rounded-full pl-11 pr-4 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                    </div>
-                </div>
-
-                <!-- Navigation Links & Cart -->
-                <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium">
-                    <a href="#hero" class="hover:text-amber-400 transition">Beranda</a>
-                    <a href="#katalog" class="hover:text-amber-400 transition">Katalog Buku</a>
-                    <a href="#kategori" class="hover:text-amber-400 transition">Kategori</a>
-                    <a href="#keunggulan" class="hover:text-amber-400 transition">Tentang Kami</a>
-                    <a href="#kontak" class="hover:text-amber-400 transition">Kontak</a>
-                </nav>
-
-                <!-- Cart Icon Button -->
-                <div class="flex items-center space-x-4">
-                    <button onclick="toggleCartDrawer()" class="relative p-2.5 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full transition-all focus:outline-none" aria-label="Keranjang Belanja">
-                        <i class="fa-solid fa-cart-shopping text-lg"></i>
-                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-amber-500 text-slate-950 font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-md scale-0 transition-transform duration-200">0</span>
-                    </button>
-
-                    <!-- Mobile Menu Toggle Button -->
-                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-300 hover:text-white focus:outline-none">
-                        <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
-                    </button>
-                </div>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                📚 PustakaNusa
             </div>
-        </div>
-
-        <!-- Mobile Navigation Menu -->
-        <div id="mobileMenu" class="hidden lg:hidden bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-6 space-y-3">
-            <div class="mb-3">
-                <input type="text" id="searchInputMobile" oninput="handleSearch(this.value)" 
-                    placeholder="Cari buku..." 
-                    class="w-full bg-slate-800 text-sm text-slate-100 placeholder-slate-400 rounded-lg pl-10 pr-4 py-2 border border-slate-700">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchInput" placeholder="Cari judul/penulis..." onkeyup="filterBooks()">
             </div>
-            <a href="#hero" onclick="toggleMobileMenu()" class="block py-2 text-slate-300 hover:text-amber-400 font-medium">Beranda</a>
-            <a href="#katalog" onclick="toggleMobileMenu()" class="block py-2 text-slate-300 hover:text-amber-400 font-medium">Katalog Buku</a>
-            <a href="#kategori" onclick="toggleMobileMenu()" class="block py-2 text-slate-300 hover:text-amber-400 font-medium">Kategori</a>
-            <a href="#keunggulan" onclick="toggleMobileMenu()" class="block py-2 text-slate-300 hover:text-amber-400 font-medium">Tentang Kami</a>
-            <a href="#kontak" onclick="toggleMobileMenu()" class="block py-2 text-slate-300 hover:text-amber-400 font-medium">Kontak</a>
-        </div>
-    </header>
-
-    <!-- HERO SECTION -->
-    <section id="hero" class="bg-gradient-to-br from-slate-900 via-navy-800 to-slate-900 text-white py-16 lg:py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Hero Left Content -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold tracking-wide uppercase">
-                        <i class="fa-solid fa-sparkles"></i> Promo Spesial Bulan Ini Diskon Hingga 40%
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                        Temukan Dunia Baru Dalam <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">Setiap Halaman</span>
-                    </h1>
-                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                        Jelajahi puluhan ribu koleksi buku original dari penerbit terbaik. Dapatkan pengalaman membaca bermakna dengan harga paling terjangkau & pengiriman kilat.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-                        <a href="#katalog" class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5">
-                            Jelajahi Katalog <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
-                        </a>
-                        <a href="#kategori" class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition">
-                            Lihat Kategori
-                        </a>
-                    </div>
-                    
-                    <!-- Stats Badges -->
-                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800 max-w-lg mx-auto lg:mx-0">
-                        <div>
-                            <span class="block text-2xl font-bold text-white">15.000+</span>
-                            <span class="text-xs text-slate-400">Judul Buku</span>
-                        </div>
-                        <div>
-                            <span class="block text-2xl font-bold text-white">99.8%</span>
-                            <span class="text-xs text-slate-400">Kepuasan Pelanggan</span>
-                        </div>
-                        <div>
-                            <span class="block text-2xl font-bold text-white">100%</span>
-                            <span class="text-xs text-slate-400">Buku Original</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hero Right Book Feature Card Showcase -->
-                <div class="lg:col-span-5 flex justify-center">
-                    <div class="relative w-full max-w-sm">
-                        <!-- Background Glow -->
-                        <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-rose-500 rounded-2xl blur-lg opacity-30 animate-pulse"></div>
-                        <div class="relative bg-slate-800/90 border border-slate-700 p-5 rounded-2xl shadow-2xl backdrop-blur-sm">
-                            <div class="relative h-80 rounded-xl overflow-hidden mb-4 group">
-                                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800" alt="Buku Unggulan Promo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <span class="absolute top-3 left-3 bg-rose-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow">Buku Pilihan</span>
-                            </div>
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs font-medium text-amber-400 uppercase tracking-wider">Pengembangan Diri</span>
-                                    <div class="text-xs text-amber-400 font-semibold"><i class="fa-solid fa-star"></i> 4.9 (1,240 Ulasan)</div>
-                                </div>
-                                <h3 class="font-bold text-lg text-white">Filosofi Teras: Seni Hidup Tenang</h3>
-                                <p class="text-xs text-slate-400">Oleh Henry Manampiring</p>
-                                <div class="flex items-center justify-between pt-3 border-t border-slate-700/60">
-                                    <div>
-                                        <span class="text-xs text-slate-400 line-through">Rp 98.000</span>
-                                        <span class="block text-xl font-bold text-amber-400">Rp 78.400</span>
-                                    </div>
-                                    <button onclick="addToCart(1)" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm rounded-lg transition shadow">
-                                        + Keranjang
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- CATEGORIES & FILTERS -->
-    <section id="kategori" class="py-12 bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-xl mx-auto mb-8">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Kategori Buku Popular</h2>
-                <p class="text-slate-500 text-sm mt-2">Pilih kategori favorit Anda untuk menemukan bacaan yang sesuai minat.</p>
-            </div>
-
-            <!-- Filter Category Pills -->
-            <div class="flex items-center justify-center gap-2 sm:gap-3 flex-wrap" id="categoryFilters">
-                <button onclick="filterCategory('all')" class="category-btn active border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-slate-900 text-white border-slate-900">
-                    <i class="fa-solid fa-layer-group mr-1.5"></i> Semua Buku
-                </button>
-                <button onclick="filterCategory('Fiksi')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-book-bookmark mr-1.5 text-indigo-500"></i> Fiksi
-                </button>
-                <button onclick="filterCategory('Non-Fiksi')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-brain mr-1.5 text-emerald-500"></i> Non-Fiksi
-                </button>
-                <button onclick="filterCategory('Pengembangan Diri')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-seedling mr-1.5 text-amber-500"></i> Pengembangan Diri
-                </button>
-                <button onclick="filterCategory('Teknologi')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-laptop-code mr-1.5 text-blue-500"></i> Teknologi
-                </button>
-                <button onclick="filterCategory('Bisnis')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-chart-line mr-1.5 text-rose-500"></i> Bisnis
-                </button>
-                <button onclick="filterCategory('Komik')" class="category-btn border px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-sm bg-white text-slate-700 border-slate-300 hover:border-slate-400 hover:bg-slate-50">
-                    <i class="fa-solid fa-face-smile mr-1.5 text-purple-500"></i> Komik
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- BOOK CATALOG GRID -->
-    <section id="katalog" class="py-16 bg-slate-50 flex-1">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Katalog Buku Utama</h2>
-                    <p class="text-slate-500 text-sm mt-1" id="catalogSubtitle">Menampilkan semua buku terbaik kami</p>
-                </div>
-                <!-- Sort Dropdown -->
-                <div class="flex items-center space-x-2">
-                    <label for="sortBy" class="text-xs font-semibold uppercase text-slate-500">Urutkan:</label>
-                    <select id="sortBy" onchange="sortBooks(this.value)" class="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm">
-                        <option value="featured">Paling Populer</option>
-                        <option value="price-low">Harga: Rendah ke Tinggi</option>
-                        <option value="price-high">Harga: Tinggi ke Rendah</option>
-                        <option value="rating">Rating Tertinggi</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Books Grid Container -->
-            <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Javascript Dynamic Books Rendering -->
-            </div>
-
-            <!-- Empty Search State -->
-            <div id="emptyState" class="hidden text-center py-16">
-                <div class="w-20 h-20 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 text-3xl">
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-                <h3 class="text-lg font-bold text-slate-800">Buku tidak ditemukan</h3>
-                <p class="text-slate-500 text-sm max-w-sm mx-auto mt-1">Coba gunakan kata kunci pencarian lain atau ubah filter kategori Anda.</p>
-                <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 transition">
-                    Reset Filter
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- FEATURES SECTION -->
-    <section id="keunggulan" class="py-16 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-slate-100/80 transition">
-                    <div class="w-14 h-14 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fa-solid fa-truck-fast"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-900 mb-1">Pengiriman Cepat</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Pengiriman aman & tepat waktu ke seluruh penjuru Nusantara dengan garansi ekstra protection.</p>
-                </div>
-
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-slate-100/80 transition">
-                    <div class="w-14 h-14 bg-emerald-500/10 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-900 mb-1">100% Original</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Semua koleksi berasal dari penerbit resmi tanpa produk tiruan atau cetakan bajakan.</p>
-                </div>
-
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-slate-100/80 transition">
-                    <div class="w-14 h-14 bg-indigo-500/10 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fa-solid fa-lock"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-900 mb-1">Pembayaran Aman</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Mendukung berbagai metode e-wallet, transfer bank, hingga layanan COD pembayaran di tempat.</p>
-                </div>
-
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-slate-100/80 transition">
-                    <div class="w-14 h-14 bg-rose-500/10 text-rose-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-900 mb-1">Layanan 24/7</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Tim customer support siap membantu pertanyaan & kendala Anda kapan saja.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TESTIMONIALS & NEWSLETTER SECTION -->
-    <section class="py-16 bg-slate-900 text-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Testimonial Grid -->
-            <div class="text-center max-w-xl mx-auto mb-12">
-                <h2 class="text-2xl sm:text-3xl font-extrabold">Apa Kata Pembaca Kami?</h2>
-                <p class="text-slate-400 text-sm mt-2">Ulasan nyata dari para pecinta buku yang berbelanja di PustakaNusa.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/60 flex flex-col justify-between">
-                    <p class="text-slate-300 text-sm italic mb-4">"Pengiriman super cepat dan kemasan bubble wrap tebal banget! Buku filosofi teras sampai tanpa penyok sedikit pun. Recomended store!"</p>
-                    <div class="flex items-center space-x-3">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Anisa Rahma</h4>
-                            <span class="text-xs text-amber-400"><i class="fa-solid fa-star"></i> Verified Buyer</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/60 flex flex-col justify-between">
-                    <p class="text-slate-300 text-sm italic mb-4">"Koleksi buku teknologinya lengkap banget. Dapet diskon menarik waktu promo launching. Pelayanan admin via WhatsApp juga gercep."</p>
-                    <div class="flex items-center space-x-3">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Budi Santoso</h4>
-                            <span class="text-xs text-amber-400"><i class="fa-solid fa-star"></i> Verified Buyer</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700/60 flex flex-col justify-between">
-                    <p class="text-slate-300 text-sm italic mb-4">"Semua bukunnya dipastikan 100% original. Senang banget nemu komik langka yang lagi dicari di toko ini. Makasih PustakaNusa!"</p>
-                    <div class="flex items-center space-x-3">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Citra Lestari</h4>
-                            <span class="text-xs text-amber-400"><i class="fa-solid fa-star"></i> Verified Buyer</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Newsletter Box -->
-            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-8 sm:p-10 text-slate-950 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-xl">
-                <div class="max-w-xl text-center lg:text-left">
-                    <h3 class="text-2xl sm:text-3xl font-extrabold">Dapatkan Voucher Diskon 20%</h3>
-                    <p class="text-slate-900 font-medium text-sm mt-1">Berlangganan newsletter kami untuk update buku bestseller terbaru dan promo spesial mingguan.</p>
-                </div>
-                <form onsubmit="handleNewsletter(event)" class="w-full lg:w-auto flex flex-col sm:flex-row gap-3">
-                    <input type="email" required placeholder="Masukkan email Anda..." class="px-5 py-3.5 rounded-xl bg-white text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 w-full sm:w-80 shadow">
-                    <button type="submit" class="px-6 py-3.5 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition shadow">
-                        Langganan
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer id="kontak" class="bg-slate-950 text-slate-400 pt-16 pb-8 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
-                <!-- Col 1: Logo & Info -->
-                <div class="lg:col-span-2 space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-amber-500 p-2 rounded-xl text-slate-900">
-                            <i class="fa-solid fa-book-open text-lg"></i>
-                        </div>
-                        <span class="text-2xl font-black text-white">Pustaka<span class="text-amber-500">Nusa</span></span>
-                    </div>
-                    <p class="text-sm text-slate-400 leading-relaxed max-w-sm">
-                        Platform penjualan buku terpercaya di Indonesia. Kami berdedikasi meningkatkan minat baca nasional dengan menyediakan buku bermutu harga terjangkau.
-                    </p>
-                    <div class="flex space-x-4 pt-2">
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-youtube"></i></a>
-                    </div>
-                </div>
-
-                <!-- Col 2: Quick Links -->
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Navigasi</h4>
-                    <ul class="space-y-2.5 text-sm">
-                        <li><a href="#hero" class="hover:text-amber-400 transition">Beranda</a></li>
-                        <li><a href="#katalog" class="hover:text-amber-400 transition">Katalog Buku</a></li>
-                        <li><a href="#kategori" class="hover:text-amber-400 transition">Kategori Popular</a></li>
-                        <li><a href="#keunggulan" class="hover:text-amber-400 transition">Keunggulan Kami</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 3: Book Categories -->
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Kategori populer</h4>
-                    <ul class="space-y-2.5 text-sm">
-                        <li><a href="#katalog" onclick="filterCategory('Fiksi')" class="hover:text-amber-400 transition">Novel & Fiksi</a></li>
-                        <li><a href="#katalog" onclick="filterCategory('Pengembangan Diri')" class="hover:text-amber-400 transition">Self Improvement</a></li>
-                        <li><a href="#katalog" onclick="filterCategory('Teknologi')" class="hover:text-amber-400 transition">Sains & Teknologi</a></li>
-                        <li><a href="#katalog" onclick="filterCategory('Bisnis')" class="hover:text-amber-400 transition">Bisnis & Ekonomi</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 4: Contact Info -->
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Hubungi Kami</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-location-dot mt-1 text-amber-500"></i>
-                            <span>Jl. Sudirman No. 123, Jakarta Selatan, Indonesia</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-phone text-amber-500"></i>
-                            <span>+62 (021) 555-0199</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-envelope text-amber-500"></i>
-                            <span>support@pustakanusa.id</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-                <p>&copy; 2026 PustakaNusa Inc. All Rights Reserved.</p>
-                <div class="flex space-x-6 mt-4 sm:mt-0">
-                    <a href="#" class="hover:text-slate-400">Kebijakan Privasi</a>
-                    <a href="#" class="hover:text-slate-400">Syarat & Ketentuan</a>
-                    <a href="#" class="hover:text-slate-400">Bantuan FAQ</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- SHOPPING CART DRAWER (OFFCANVAS) -->
-    <div id="cartDrawerOverlay" onclick="toggleCartDrawer()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden transition-opacity duration-300 opacity-0"></div>
-    <div id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-        <!-- Cart Header -->
-        <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-900 text-white">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-cart-shopping text-amber-500"></i>
-                <h3 class="font-bold text-lg">Keranjang Belanja</h3>
-                <span id="cartDrawerCount" class="text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 font-semibold px-2 py-0.5 rounded-full">0 Item</span>
-            </div>
-            <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1 rounded-lg">
-                <i class="fa-solid fa-xmark text-xl"></i>
+            <button class="cart-btn" onclick="toggleCart()">
+                🛒 <span class="cart-badge" id="cartCount">0</span>
             </button>
         </div>
+    </nav>
 
-        <!-- Cart Items List Container -->
-        <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-4">
-            <!-- Dynamic Cart Items Output -->
+    <div class="container">
+        <!-- HERO BANNER -->
+        <div class="hero">
+            <span class="hero-badge">PROMO MERDEKA BACA</span>
+            <h1>Diskon Spesial Hingga 30%</h1>
+            <p>Dapatkan koleksi buku fiksi, teknologi, dan pengembangan diri terbaik!</p>
         </div>
 
-        <!-- Cart Footer Summary -->
-        <div id="cartFooter" class="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
-            <div class="space-y-1.5 text-xs text-slate-600">
-                <div class="flex justify-between">
-                    <span>Subtotal Produk</span>
-                    <span id="cartSubtotal" class="font-medium text-slate-900">Rp 0</span>
-                </div>
-                <div class="flex justify-between">
-                    <span>Pajak (PPN 11%)</span>
-                    <span id="cartTax" class="font-medium text-slate-900">Rp 0</span>
-                </div>
-                <div class="flex justify-between text-emerald-600">
-                    <span>Diskon Promo</span>
-                    <span id="cartDiscount" class="font-medium">-Rp 0</span>
-                </div>
-                <div class="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
-                    <span>Total Tagihan</span>
-                    <span id="cartTotal" class="text-amber-600">Rp 0</span>
-                </div>
-            </div>
+        <!-- KATEGORI -->
+        <div class="section-title">📂 Kategori Buku</div>
+        <div class="categories">
+            <button class="cat-chip active" onclick="filterCategory('all', this)">Semua</button>
+            <button class="cat-chip" onclick="filterCategory('Pengembangan Diri', this)">Pengembangan Diri</button>
+            <button class="cat-chip" onclick="filterCategory('Teknologi', this)">Teknologi</button>
+            <button class="cat-chip" onclick="filterCategory('Fiksi', this)">Fiksi</button>
+            <button class="cat-chip" onclick="filterCategory('Bisnis', this)">Bisnis</button>
+        </div>
 
-            <button id="checkoutBtn" onclick="openCheckoutModal()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span>Lanjut ke Checkout</span>
-                <i class="fa-solid fa-arrow-right text-xs"></i>
-            </button>
+        <!-- KATALOG BUKU -->
+        <div class="section-title">🔥 Katalog Utama</div>
+        <div class="book-grid" id="bookGrid">
+            <!-- Render via JavaScript -->
         </div>
     </div>
 
-    <!-- BOOK DETAIL MODAL -->
-    <div id="detailModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-scaleUp">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 z-10 bg-slate-100 hover:bg-slate-200 text-slate-700 w-9 h-9 rounded-full flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <div id="modalContent" class="p-6 sm:p-8">
-                <!-- Javascript Filled Content -->
+    <!-- CART DRAWER -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <span>Keranjang Belanja (🛒)</span>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-body" id="cartItems">
+            <p style="text-align: center; color: var(--text-muted); margin-top: 40px;">Keranjang Anda masih kosong.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>Total:</span>
+                <span id="cartTotal" style="color: var(--primary);">Rp 0</span>
             </div>
+            <button class="checkout-btn" onclick="checkout()">Checkout Sekarang</button>
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL -->
-    <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative">
-            <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-900 text-white rounded-t-2xl">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-credit-card text-amber-500 mr-2"></i> Form Pembayaran</h3>
-                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
+    <!-- TOAST NOTIFIKASI -->
+    <div class="toast" id="toast">Berhasil ditambahkan ke keranjang!</div>
 
-            <form onsubmit="processOrder(event)" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Lengkap</label>
-                    <input type="text" required placeholder="Ahmad Rizki" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email</label>
-                        <input type="email" required placeholder="rizki@example.com" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nomor WhatsApp</label>
-                        <input type="tel" required placeholder="081234567890" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Alamat Pengiriman</label>
-                    <textarea required rows="2" placeholder="Jl. Mawar No. 45, Kecamatan Gambir, Jakarta Pusat" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Metode Pembayaran</label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <label class="border rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:border-amber-500 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
-                            <input type="radio" name="payment" value="BCA" checked class="sr-only">
-                            <i class="fa-solid fa-building-columns text-slate-700 text-lg mb-1"></i>
-                            <span class="text-xs font-semibold">Bank Transfer</span>
-                        </label>
-                        <label class="border rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:border-amber-500 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
-                            <input type="radio" name="payment" value="Gopay" class="sr-only">
-                            <i class="fa-solid fa-wallet text-slate-700 text-lg mb-1"></i>
-                            <span class="text-xs font-semibold">E-Wallet</span>
-                        </label>
-                        <label class="border rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:border-amber-500 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
-                            <input type="radio" name="payment" value="COD" class="sr-only">
-                            <i class="fa-solid fa-hand-holding-dollar text-slate-700 text-lg mb-1"></i>
-                            <span class="text-xs font-semibold">COD (Bayar Saja)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between text-sm font-bold text-slate-900">
-                        <span>Total Pembayaran Akhir</span>
-                        <span id="checkoutTotal" class="text-amber-600">Rp 0</span>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition">
-                    Konfirmasi & Bayar Sekarang
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-3 pointer-events-none"></div>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // DATA BUKU SAMPLING (MOCK DATABASE)
-        const booksData = [
+        // DATA BUKU (DATABASE LOKAL)
+        const books = [
             {
                 id: 1,
-                title: "Filosofi Teras: Seni Hidup Tenang",
+                title: "Filosofi Teras",
                 author: "Henry Manampiring",
                 category: "Pengembangan Diri",
-                price: 98000,
-                discountPrice: 78400,
-                rating: 4.9,
-                badge: "Terlaris",
-                pages: 320,
-                publisher: "Kompas Gramedia",
-                cover: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Buku pengembangan diri yang mengadaptasi stoisisme kuno untuk menghadapi kekhawatiran dan stres kehidupan modern secara rasional."
+                price: 88000,
+                rating: "4.9 ⭐",
+                bgClass: "bg-amber"
             },
             {
                 id: 2,
-                title: "Atomic Habits: Perubahan Kecil",
+                title: "Atomic Habits",
                 author: "James Clear",
                 category: "Pengembangan Diri",
                 price: 108000,
-                discountPrice: 89000,
-                rating: 5.0,
-                badge: "Diskon 18%",
-                pages: 352,
-                publisher: "Gramedia Pustaka Utama",
-                cover: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Panduan praktis terkemuka untuk membangun kebiasaan baik dan menghilangkan kebiasaan buruk dengan sistem 1% setiap harinya."
+                rating: "4.8 ⭐",
+                bgClass: "bg-blue"
             },
             {
                 id: 3,
-                title: "Bumi: Serial Dunia Paralel",
-                author: "Tere Liye",
-                category: "Fiksi",
-                price: 89000,
-                discountPrice: null,
-                rating: 4.8,
-                badge: "Populer",
-                pages: 440,
-                publisher: "Republika",
-                cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Petualangan 3 sahabat remaja, Raib, Seli, dan Ali yang memiliki kemampuan ajaib menjelajahi klan dunia paralel."
+                title: "Mastering JavaScript",
+                author: "Eko Kurniawan",
+                category: "Teknologi",
+                price: 125000,
+                rating: "4.7 ⭐",
+                bgClass: "bg-emerald"
             },
             {
                 id: 4,
-                title: "Clean Code: A Handbook of Agile Software",
-                author: "Robert C. Martin",
-                category: "Teknologi",
-                price: 240000,
-                discountPrice: 199000,
-                rating: 4.9,
-                badge: "Diskon",
-                pages: 464,
-                publisher: "Prentice Hall",
-                cover: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Panduan standar wajib pengembang perangkat lunak untuk menulis kode yang bersih, efisien, dan mudah dirawat."
+                title: "Bumi Manusia",
+                author: "Pramoedya A. Toer",
+                category: "Fiksi",
+                price: 95000,
+                rating: "5.0 ⭐",
+                bgClass: "bg-rose"
             },
             {
                 id: 5,
                 title: "Psychology of Money",
                 author: "Morgan Housel",
                 category: "Bisnis",
-                price: 95000,
-                discountPrice: 85500,
-                rating: 4.9,
-                badge: "Terlaris",
-                pages: 268,
-                publisher: "Baca",
-                cover: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Pelajaran berharga mengenai perilaku, ketakutan, dan keserakahan manusia dalam mengelola uang dan kekayaan."
+                price: 85000,
+                rating: "4.9 ⭐",
+                bgClass: "bg-purple"
             },
             {
                 id: 6,
-                title: "Sebuah Seni untuk Bersikap Bodo Amat",
-                author: "Mark Manson",
-                category: "Pengembangan Diri",
-                price: 88000,
-                discountPrice: null,
-                rating: 4.7,
-                badge: null,
-                pages: 256,
-                publisher: "Grasindo",
-                cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Pendekatan segar yang menganjurkan kita untuk fokus pada hal-hal yang benar-benar penting dalam hidup."
-            },
-            {
-                id: 7,
-                title: "Dunia Sophie: Novel Sejarah Filsafat",
-                author: "Jostein Gaarder",
-                category: "Fiksi",
-                price: 135000,
-                discountPrice: 115000,
-                rating: 4.8,
-                badge: "Klasik",
-                pages: 580,
-                publisher: "Mizan",
-                cover: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Gadis remaja berusia 14 tahun misterius menerima kursus filsafat rahasia lewat surat-surat tak dikenal."
-            },
-            {
-                id: 8,
-                title: "One Piece Vol. 100",
-                author: "Eiichiro Oda",
-                category: "Komik",
-                price: 45000,
-                discountPrice: null,
-                rating: 5.0,
-                badge: "Baru",
-                pages: 192,
-                publisher: "Elex Media Komputindo",
-                cover: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&q=80&w=600",
-                synopsis: "Pertempuran puncak di Onigashima berlanjut. Luffy dan aliansinya mempertaruhkan masa depan Negeri Wano!"
+                title: "Clean Code & Refactoring",
+                author: "Robert C. Martin",
+                category: "Teknologi",
+                price: 140000,
+                rating: "4.8 ⭐",
+                bgClass: "bg-slate"
             }
         ];
 
-        // GLOBAL APP STATE
         let cart = [];
         let currentCategory = 'all';
-        let searchQuery = '';
-        let currentSort = 'featured';
 
-        // INITIALIZATION
-        window.addEventListener('DOMContentLoaded', () => {
-            renderBooks();
-            updateCartUI();
-        });
+        // RENDER DAFAR BUKU
+        function renderBooks(data) {
+            const grid = document.getElementById("bookGrid");
+            grid.innerHTML = "";
 
-        // RENDER BOOKS GRID
-        function renderBooks() {
-            const grid = document.getElementById('booksGrid');
-            const emptyState = document.getElementById('emptyState');
-            
-            // Filter Logic
-            let filtered = booksData.filter(book => {
-                const matchCategory = currentCategory === 'all' || book.category === currentCategory;
-                const matchSearch = book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                    book.author.toLowerCase().includes(searchQuery.toLowerCase());
-                return matchCategory && matchSearch;
-            });
-
-            // Sort Logic
-            if (currentSort === 'price-low') {
-                filtered.sort((a, b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
-            } else if (currentSort === 'price-high') {
-                filtered.sort((a, b) => (b.discountPrice || b.price) - (a.discountPrice || a.price));
-            } else if (currentSort === 'rating') {
-                filtered.sort((a, b) => b.rating - a.rating);
-            }
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
+            if (data.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 20px;">Buku tidak ditemukan.</p>`;
                 return;
             }
 
-            emptyState.classList.add('hidden');
-            grid.innerHTML = filtered.map(book => {
-                const effectivePrice = book.discountPrice || book.price;
-                return `
-                <div class="bg-white border border-slate-200/80 rounded-2xl overflow-hidden book-card-hover flex flex-col justify-between group">
-                    <div class="relative">
-                        <!-- Book Cover Image -->
-                        <div class="h-64 bg-slate-100 overflow-hidden relative cursor-pointer" onclick="openDetailModal(${book.id})">
-                            <img src="${book.cover}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x600/1e293b/ffffff?text=Buku+Nusa'">
-                            ${book.badge ? `<span class="absolute top-3 left-3 bg-rose-600 text-white text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded-full uppercase shadow-md">${book.badge}</span>` : ''}
+            data.forEach(book => {
+                grid.innerHTML += `
+                    <div class="book-card">
+                        <div class="book-cover ${book.bgClass}">
+                            <div class="cover-spine"></div>
+                            <span class="cover-tag">${book.category}</span>
+                            <div class="cover-title">${book.title}</div>
+                            <div class="cover-author">${book.author}</div>
                         </div>
-                    </div>
-
-                    <!-- Book Information -->
-                    <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
-                        <div>
-                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
-                                <span class="font-medium text-amber-600">${book.category}</span>
-                                <span><i class="fa-solid fa-star text-amber-400"></i> ${book.rating}</span>
-                            </div>
-                            <h3 class="font-bold text-slate-900 line-clamp-2 hover:text-amber-600 transition cursor-pointer" onclick="openDetailModal(${book.id})">${book.title}</h3>
-                            <p class="text-xs text-slate-500 mt-1">${book.author}</p>
-                        </div>
-
-                        <div class="pt-2 border-t border-slate-100">
-                            <div class="flex items-baseline space-x-2">
-                                <span class="text-lg font-black text-slate-900">${formatRupiah(effectivePrice)}</span>
-                                ${book.discountPrice ? `<span class="text-xs text-slate-400 line-through">${formatRupiah(book.price)}</span>` : ''}
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-2 mt-3">
-                                <button onclick="openDetailModal(${book.id})" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition text-center">
-                                    Detail
-                                </button>
-                                <button onclick="addToCart(${book.id})" class="px-3 py-2 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white text-xs font-bold rounded-lg transition text-center flex items-center justify-center space-x-1">
-                                    <i class="fa-solid fa-cart-plus"></i>
-                                    <span>Beli</span>
-                                </button>
+                        <div class="book-info">
+                            <h3>${book.title}</h3>
+                            <div class="book-author">${book.author}</div>
+                            <div class="book-rating">${book.rating}</div>
+                            <div class="book-price-row">
+                                <span class="book-price">Rp ${book.price.toLocaleString('id-ID')}</span>
+                                <button class="add-btn" onclick="addToCart(${book.id})">+ Beli</button>
                             </div>
                         </div>
                     </div>
-                </div>
                 `;
-            }).join('');
-        }
-
-        // FILTER & SEARCH HANDLERS
-        function filterCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('bg-slate-900', 'text-white', 'border-slate-900');
-                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-300');
             });
-            event.currentTarget.classList.remove('bg-white', 'text-slate-700', 'border-slate-300');
-            event.currentTarget.classList.add('bg-slate-900', 'text-white', 'border-slate-900');
-            
-            document.getElementById('catalogSubtitle').textContent = cat === 'all' ? 'Menampilkan semua buku terbaik kami' : `Kategori: ${cat}`;
-            renderBooks();
         }
 
-        function handleSearch(val) {
-            searchQuery = val;
-            renderBooks();
+        // FILTER KATEGORI
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            filterBooks();
         }
 
-        function sortBooks(val) {
-            currentSort = val;
-            renderBooks();
+        // SEARCH & FILTER
+        function filterBooks() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = books.filter(b => {
+                const matchCategory = currentCategory === 'all' || b.category === currentCategory;
+                const matchSearch = b.title.toLowerCase().includes(query) || b.author.toLowerCase().includes(query);
+                return matchCategory && matchSearch;
+            });
+            renderBooks(filtered);
         }
 
-        function resetFilters() {
-            searchQuery = '';
-            currentCategory = 'all';
-            document.getElementById('searchInputDesktop').value = '';
-            document.getElementById('searchInputMobile').value = '';
-            renderBooks();
-        }
+        // KERANJANG BELANJA LOGIC
+        function addToCart(id) {
+            const book = books.find(b => b.id === id);
+            const exist = cart.find(item => item.id === id);
 
-        // CART LOGIC
-        function addToCart(bookId) {
-            const book = booksData.find(b => b.id === bookId);
-            const existingItem = cart.find(item => item.id === bookId);
-
-            if (existingItem) {
-                existingItem.qty += 1;
+            if (exist) {
+                exist.qty++;
             } else {
-                cart.push({
-                    id: book.id,
-                    title: book.title,
-                    price: book.discountPrice || book.price,
-                    cover: book.cover,
-                    qty: 1
-                });
+                cart.push({ ...book, qty: 1 });
             }
 
             updateCartUI();
             showToast(`"${book.title}" ditambahkan ke keranjang!`);
         }
 
-        function updateCartQty(id, change) {
-            const item = cart.find(i => i.id === id);
-            if (item) {
-                item.qty += change;
-                if (item.qty <= 0) {
-                    cart = cart.filter(i => i.id !== id);
-                }
-            }
-            updateCartUI();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(i => i.id !== id);
-            updateCartUI();
-            showToast("Buku dihapus dari keranjang", "info");
-        }
-
         function updateCartUI() {
-            const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
-            const badge = document.getElementById('cartBadge');
-            const drawerCount = document.getElementById('cartDrawerCount');
+            const countEl = document.getElementById("cartCount");
+            const itemsEl = document.getElementById("cartItems");
+            const totalEl = document.getElementById("cartTotal");
 
-            // Update Badge
-            badge.textContent = totalCount;
-            if (totalCount > 0) {
-                badge.classList.remove('scale-0');
-                badge.classList.add('scale-100');
-            } else {
-                badge.classList.remove('scale-100');
-                badge.classList.add('scale-0');
-            }
-            drawerCount.textContent = `${totalCount} Item`;
+            const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
-            // Calculate Subtotal
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            const tax = subtotal * 0.11;
-            const discount = subtotal > 200000 ? 20000 : 0; // Bonus diskon otomatis
-            const grandTotal = Math.max(0, subtotal + tax - discount);
-
-            document.getElementById('cartSubtotal').textContent = formatRupiah(subtotal);
-            document.getElementById('cartTax').textContent = formatRupiah(tax);
-            document.getElementById('cartDiscount').textContent = `-${formatRupiah(discount)}`;
-            document.getElementById('cartTotal').textContent = formatRupiah(grandTotal);
-            document.getElementById('checkoutTotal').textContent = formatRupiah(grandTotal);
-
-            // Render List Items
-            const cartItemsList = document.getElementById('cartItemsList');
-            const checkoutBtn = document.getElementById('checkoutBtn');
+            countEl.innerText = totalQty;
+            totalEl.innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
 
             if (cart.length === 0) {
-                cartItemsList.innerHTML = `
-                    <div class="text-center py-12 text-slate-400">
-                        <i class="fa-solid fa-cart-flatbed text-4xl mb-3 block opacity-50"></i>
-                        <p class="text-sm font-medium">Keranjang belanja Anda kosong.</p>
+                itemsEl.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 40px;">Keranjang Anda masih kosong.</p>`;
+                return;
+            }
+
+            itemsEl.innerHTML = "";
+            cart.forEach(item => {
+                itemsEl.innerHTML += `
+                    <div class="cart-item">
+                        <div style="flex: 1;">
+                            <div class="cart-item-title">${item.title}</div>
+                            <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                            <div class="cart-controls">
+                                <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                                <span style="font-size: 13px;">${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
                     </div>
                 `;
-                checkoutBtn.disabled = true;
-            } else {
-                checkoutBtn.disabled = false;
-                cartItemsList.innerHTML = cart.map(item => `
-                    <div class="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
-                        <img src="${item.cover}" alt="${item.title}" class="w-14 h-20 object-cover rounded-md flex-shrink-0">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-xs font-bold text-slate-900 truncate">${item.title}</h4>
-                            <span class="text-xs text-amber-600 font-semibold block mt-0.5">${formatRupiah(item.price)}</span>
-                            <div class="flex items-center space-x-2 mt-2">
-                                <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 rounded bg-slate-200 text-slate-700 flex items-center justify-center text-xs hover:bg-slate-300">-</button>
-                                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                                <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 rounded bg-slate-200 text-slate-700 flex items-center justify-center text-xs hover:bg-slate-300">+</button>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart(${item.id})" class="text-slate-400 hover:text-rose-600 p-1">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    </div>
-                `).join('');
+            });
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                cart = cart.filter(i => i.id !== id);
             }
+            updateCartUI();
         }
 
-        // DRAWER CONTROLS
-        function toggleCartDrawer() {
-            const drawer = document.getElementById('cartDrawer');
-            const overlay = document.getElementById('cartDrawerOverlay');
+        function toggleCart() {
+            document.getElementById("cartOverlay").classList.toggle("active");
+            document.getElementById("cartDrawer").classList.toggle("active");
+        }
 
-            if (drawer.classList.contains('translate-x-full')) {
-                drawer.classList.remove('translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(() => overlay.classList.add('opacity-100'), 10);
-            } else {
-                drawer.classList.add('translate-x-full');
-                overlay.classList.remove('opacity-100');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Keranjang masih kosong!");
+                return;
             }
-        }
-
-        // MODAL DETAIL BOOK
-        function openDetailModal(id) {
-            const book = booksData.find(b => b.id === id);
-            const content = document.getElementById('modalContent');
-
-            content.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <div class="md:col-span-5">
-                        <img src="${book.cover}" alt="${book.title}" class="w-full h-80 object-cover rounded-xl shadow-md">
-                    </div>
-                    <div class="md:col-span-7 flex flex-col justify-between space-y-4">
-                        <div>
-                            <span class="inline-block px-2.5 py-1 bg-amber-500/10 text-amber-600 text-xs font-bold rounded-md uppercase mb-2">${book.category}</span>
-                            <h2 class="text-2xl font-extrabold text-slate-900 leading-snug">${book.title}</h2>
-                            <p class="text-sm text-slate-500 mt-1">Penulis: <span class="text-slate-800 font-semibold">${book.author}</span></p>
-                            <div class="flex items-center space-x-3 text-xs text-slate-600 mt-3">
-                                <span><i class="fa-solid fa-star text-amber-400"></i> ${book.rating}</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-file-lines text-slate-400"></i> ${book.pages} Halaman</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-building text-slate-400"></i> ${book.publisher}</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider mb-1">Sinopsis Ringkas</h4>
-                            <p class="text-xs text-slate-600 leading-relaxed">${book.synopsis}</p>
-                        </div>
-
-                        <div class="flex items-center justify-between pt-2">
-                            <div>
-                                <span class="text-xs text-slate-400 block">Harga Buku</span>
-                                <span class="text-2xl font-black text-amber-600">${formatRupiah(book.discountPrice || book.price)}</span>
-                            </div>
-                            <button onclick="addToCart(${book.id}); closeDetailModal();" class="px-6 py-3 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white font-bold text-sm rounded-xl transition shadow">
-                                + Keranjang Belanja
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('detailModal').classList.remove('hidden');
-        }
-
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
-
-        // CHECKOUT MODAL LOGIC
-        function openCheckoutModal() {
-            if (cart.length === 0) return;
-            toggleCartDrawer();
-            document.getElementById('checkoutModal').classList.remove('hidden');
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').classList.add('hidden');
-        }
-
-        function processOrder(e) {
-            e.preventDefault();
-            closeCheckoutModal();
+            alert("Terima kasih! Pesanan Anda akan diproses.");
             cart = [];
             updateCartUI();
-            showToast("Pesanan berhasil dibuat! Tim kami akan menghubungi Anda via WA.", "success");
+            toggleCart();
         }
 
-        function handleNewsletter(e) {
-            e.preventDefault();
-            e.target.reset();
-            showToast("Terima kasih telah berlangganan newsletter!", "success");
-        }
-
-        // MOBILE MENU TOGGLE
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-
-        // UTILITY FUNCTIONS
-        function formatRupiah(num) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
-        }
-
-        function showToast(msg, type = "success") {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            
-            const bgClass = type === "success" ? "bg-slate-900 text-white border-amber-500" : "bg-slate-800 text-white border-slate-600";
-            
-            toast.className = `toast-enter p-4 rounded-xl border-l-4 ${bgClass} shadow-xl flex items-center space-x-3 pointer-events-auto min-w-[280px]`;
-            toast.innerHTML = `
-                <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-amber-500' : 'fa-circle-info text-blue-400'} text-lg"></i>
-                <span class="text-xs font-semibold">${msg}</span>
-            `;
-
-            container.appendChild(toast);
-
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.classList.add("show");
             setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease-out';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+                toast.classList.remove("show");
+            }, 2000);
         }
+
+        // INIT INITIAL RENDER
+        renderBooks(books);
     </script>
 </body>
 </html>
