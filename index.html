@@ -1,693 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PustakaNusa - Toko Buku Online</title>
-  <style>
-    /* ==========================================================================
-       RESET & BASE STYLES
-       ========================================================================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
-
-    :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --secondary: #0f172a;
-      --bg-light: #f8fafc;
-      --card-bg: #ffffff;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --accent-orange: #f97316;
-      --accent-green: #10b981;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-      --radius: 12px;
-    }
-
-    body {
-      background-color: var(--bg-light);
-      color: var(--text-dark);
-      line-height: 1.5;
-      padding-bottom: 60px;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      outline: none;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    /* ==========================================================================
-       NAVBAR
-       ========================================================================== */
-    header {
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .search-bar {
-      flex: 1;
-      max-width: 450px;
-      position: relative;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 0.6rem 1rem 0.6rem 2.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: 9999px;
-      font-size: 0.9rem;
-      background-color: var(--bg-light);
-    }
-
-    .search-bar input:focus {
-      outline: 2px solid var(--primary);
-      background-color: #fff;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .cart-btn {
-      background-color: #e0e7ff;
-      color: var(--primary);
-      padding: 0.6rem 1.2rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      position: relative;
-    }
-
-    .cart-btn:hover {
-      background-color: #c7d2fe;
-    }
-
-    .cart-badge {
-      background-color: var(--accent-orange);
-      color: #fff;
-      font-size: 0.75rem;
-      padding: 2px 7px;
-      border-radius: 9999px;
-      font-weight: bold;
-    }
-
-    /* ==========================================================================
-       HERO BANNER
-       ========================================================================== */
-    .hero {
-      background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
-      color: white;
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
-
-    .hero-content {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .hero-tag {
-      background-color: rgba(255,255,255,0.2);
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero h1 {
-      font-size: 2.2rem;
-      margin-bottom: 0.75rem;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    .hero p {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-btn {
-      background-color: var(--accent-orange);
-      color: white;
-      padding: 0.8rem 1.8rem;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
-    .hero-btn:hover {
-      background-color: #ea580c;
-    }
-
-    /* ==========================================================================
-       MAIN LAYOUT & CATEGORIES
-       ========================================================================== */
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .category-filters {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .cat-btn {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      color: var(--text-dark);
-    }
-
-    .cat-btn.active {
-      background-color: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    /* ==========================================================================
-       BOOK GRID & BOOK COVERS (CSS VECTOR COVERS)
-       ========================================================================== */
-    .book-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .book-card {
-      background-color: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .book-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
-
-    /* CSS BOOK COVER (Substitusi gambar img tanpa internet) */
-    .book-cover {
-      height: 220px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: white;
-      position: relative;
-      overflow: hidden;
-      box-shadow: inset -5px 0 10px rgba(0,0,0,0.15);
-    }
-
-    .book-cover::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 10px; height: 100%;
-      background: rgba(0,0,0,0.2);
-    }
-
-    .cover-icon {
-      font-size: 2.5rem;
-      opacity: 0.85;
-      text-align: right;
-    }
-
-    .cover-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.3;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    }
-
-    .cover-author {
-      font-size: 0.8rem;
-      opacity: 0.9;
-      margin-top: 0.2rem;
-    }
-
-    /* Cover Gradients per BUKU */
-    .bg-gradient-1 { background: linear-gradient(135deg, #d97706, #78350f); }
-    .bg-gradient-2 { background: linear-gradient(135deg, #2563eb, #1e3a8a); }
-    .bg-gradient-3 { background: linear-gradient(135deg, #059669, #064e3b); }
-    .bg-gradient-4 { background: linear-gradient(135deg, #7c3aed, #4c1d95); }
-    .bg-gradient-5 { background: linear-gradient(135deg, #dc2626, #881337); }
-    .bg-gradient-6 { background: linear-gradient(135deg, #0891b2, #164e63); }
-
-    .book-info {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      justify-content: space-between;
-    }
-
-    .book-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    .rating {
-      color: #eab308;
-      font-weight: bold;
-    }
-
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .price-main {
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--secondary);
-    }
-
-    .price-slash {
-      font-size: 0.8rem;
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
-
-    .add-cart-btn {
-      width: 100%;
-      background-color: var(--primary);
-      color: white;
-      padding: 0.6rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-
-    .add-cart-btn:hover {
-      background-color: var(--primary-hover);
-    }
-
-    /* ==========================================================================
-       CART DRAWER (OFFCANVAS)
-       ========================================================================== */
-    .cart-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      display: none;
-    }
-
-    .cart-overlay.active {
-      display: block;
-    }
-
-    .cart-drawer {
-      position: fixed;
-      top: 0; right: -400px;
-      width: 100%;
-      max-width: 380px;
-      height: 100%;
-      background: white;
-      z-index: 201;
-      box-shadow: var(--shadow-lg);
-      transition: right 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cart-drawer.active {
-      right: 0;
-    }
-
-    .cart-header {
-      padding: 1.25rem;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .close-btn {
-      background: none;
-      font-size: 1.25rem;
-      color: var(--text-muted);
-    }
-
-    .cart-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.25rem;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .cart-item-title {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .cart-item-price {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .cart-qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.4rem;
-    }
-
-    .qty-btn {
-      background: var(--bg-light);
-      border: 1px solid var(--border-color);
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .cart-footer {
-      padding: 1.25rem;
-      border-top: 1px solid var(--border-color);
-      background-color: var(--bg-light);
-    }
-
-    .cart-summary-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    .cart-total-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid var(--border-color);
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      background-color: var(--accent-green);
-      color: white;
-      padding: 0.8rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .checkout-btn:hover {
-      background-color: #059669;
-    }
-
-    .empty-cart {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--text-muted);
-    }
-
-    /* ==========================================================================
-       MODAL CHECKOUT
-       ========================================================================== */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 300;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-card {
-      background: white;
-      width: 100%;
-      max-width: 480px;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .modal-header {
-      padding: 1rem 1.25rem;
-      background-color: var(--bg-light);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-body {
-      padding: 1.25rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 0.6rem;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-
-    /* ==========================================================================
-       TOAST NOTIFICATION
-       ========================================================================== */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: var(--secondary);
-      color: white;
-      padding: 0.75rem 1.25rem;
-      border-radius: 8px;
-      box-shadow: var(--shadow-lg);
-      z-index: 400;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* RESPONSIVE DESIGN FOR MOBILE HP */
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 1.6rem; }
-      .book-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-      .book-cover { height: 170px; padding: 0.8rem; }
-      .cover-title { font-size: 0.9rem; }
-      .cover-icon { font-size: 1.8rem; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- NAVBAR -->
-  <header>
-    <div class="nav-container">
-      <div class="logo">
-        <span>📚</span> PustakaNusa
-      </div>
-      <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Cari judul buku atau penulis..." oninput="filterBooks()">
-      </div>
-      <button class="cart-btn" onclick="toggleCart(true)">
-        <span>🛒</span>
-        <span>Keranjang</span>
-        <span class="cart-badge" id="cartBadge">0</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- HERO BANNER -->
-  <section class="hero">
-    <div class="hero-content">
-      <span class="hero-tag">🔥 Promo Hari Ini - Diskon 15%</span>
-      <h1>Temukan Buku Favoritmu Tanpa Batas</h1>
-      <p>Koleksi buku fiksi, teknologi, hingga pengembangan diri terbaik siap menemani hari-harimu.</p>
-      <button class="hero-btn" onclick="document.getElementById('katalog').scrollIntoView({behavior: 'smooth'})">Eksplorasi Katalog 👇</button>
-    </div>
-  </section>
-
-  <!-- MAIN CATALOG CONTENT -->
-  <main class="container" id="katalog">
-    <h2 class="section-title"><span>📖</span> Katalog Buku</h2>
-    
-    <!-- CATEGORY FILTERS -->
-    <div class="category-filters">
-      <button class="cat-btn active" onclick="setCategory('all', this)">Semua Kategori</button>
-      <button class="cat-btn" onclick="setCategory('Pengembangan Diri', this)">Pengembangan Diri</button>
-      <button class="cat-btn" onclick="setCategory('Fiksi', this)">Fiksi</button>
-      <button class="cat-btn" onclick="setCategory('Teknologi', this)">Teknologi</button>
-      <button class="cat-btn" onclick="setCategory('Bisnis', this)">Bisnis</button>
-    </div>
-
-    <!-- BOOK GRID -->
-    <div class="book-grid" id="bookGrid">
-      <!-- Cards rendered via JavaScript -->
-    </div>
-  </main>
-
-  <!-- CART DRAWER / OFFCANVAS -->
-  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
-  <div class="cart-drawer" id="cartDrawer">
-    <div class="cart-header">
-      <h3>🛒 Keranjang Belanja</h3>
-      <button class="close-btn" onclick="toggleCart(false)">✖</button>
-    </div>
-    <div class="cart-body" id="cartBody">
-      <!-- Cart items injected here -->
-    </div>
-    <div class="cart-footer">
-      <div class="cart-summary-row">
-        <span>Subtotal</span>
-        <span id="subtotalPrice">Rp 0</span>
-      </div>
-      <div class="cart-summary-row">
-        <span>PPN (11%)</span>
-        <span id="taxPrice">Rp 0</span>
-      </div>
-      <div class="cart-total-row">
-        <span>Total</span>
-        <span id="totalPrice" style="color: var(--primary);">Rp 0</span>
-      </div>
-      <button class="checkout-btn" onclick="openCheckoutModal()">Proses Checkout ➔</button>
-    </div>
-  </div>
-
-  <!-- CHECKOUT MODAL -->
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>📝 Form Pemesanan</h3>
-        <button class="close-btn" onclick="toggleCheckoutModal(false)">✖</button>
-      </div>
-      <div class="modal-body">
-        <form id="checkoutForm" onsubmit="handleCheckout(event)">
-          <div class="form-group">
-            <label>Nama Lengkap</label>
-            <input type="text" required placeholder="Contoh: Budi Santoso">
-          </div>
-          <div class="form-group">
-            <label>Nomor WhatsApp</label>
-            Berikut adalah file `index.html` lengkap yang ditulis menggunakan **Pure CSS Inline & Internal (Zero Dependency)**. 
-
-### Kenapa Kode Ini Dijamin Bagus di HP (Acode) & Vercel:
-1. **Bisa Offline di Acode**: Tidak menggunakan CDN Tailwind, Bootstrap, atau FontAwesome external. Semua style CSS ditulis langsung di dalam tag `<style>`, sehingga saat di-preview di Acode **layout-nya langsung rapi, berwarna, dan responsif**.
-2. **Tanpa Gambar Luar**: Cover buku dibuat menggunakan **CSS Art & Gradient** + **Emoji Asli System (📚, 🛒, ⭐)**. Tidak akan ada lagi gambar pecah/patah saat dibuka di HP.
-3. **Siap Upload ke GitHub & Vercel**: Tinggal simpan file ini dengan nama `index.html`, lalu push ke GitHub dan deploy ke Vercel tanpa butuh konfigurasi build / node_modules sama sekali.
-
----
-
-### File `index.html`
-
-```html
-<!DOCTYPE html>
-<html lang="id">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PustakaNusa - Toko Buku Online</title>
@@ -892,7 +205,7 @@
             box-shadow: var(--shadow);
         }
 
-        /* CSS BOOK COVER (TANPA GAMBAR EXTERNAL) */
+        /* CSS BOOK COVER */
         .book-cover {
             width: 100%;
             height: 180px;
@@ -907,7 +220,6 @@
             margin-bottom: 12px;
         }
 
-        /* Color Themes for Covers */
         .bg-blue { background: linear-gradient(135deg, #1e40af, #3b82f6); }
         .bg-emerald { background: linear-gradient(135deg, #065f46, #10b981); }
         .bg-purple { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
@@ -937,10 +249,7 @@
 
         .cover-spine {
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 5px;
+            left: 0; top: 0; bottom: 0; width: 5px;
             background: rgba(255, 255, 255, 0.2);
             border-top-left-radius: 8px;
             border-bottom-left-radius: 8px;
@@ -987,7 +296,7 @@
         .add-btn {
             background: var(--primary);
             color: white;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
@@ -1045,9 +354,10 @@
 
         .cart-item {
             display: flex;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 16px;
-            padding-bottom: 16px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -1181,69 +491,21 @@
     <!-- TOAST NOTIFIKASI -->
     <div class="toast" id="toast">Berhasil ditambahkan ke keranjang!</div>
 
+    <!-- JAVASCRIPT DIRECT INLINE (Cukup upload 1 file index.html ke GitHub) -->
     <script>
-        // DATA BUKU (DATABASE LOKAL)
         const books = [
-            {
-                id: 1,
-                title: "Filosofi Teras",
-                author: "Henry Manampiring",
-                category: "Pengembangan Diri",
-                price: 88000,
-                rating: "4.9 ⭐",
-                bgClass: "bg-amber"
-            },
-            {
-                id: 2,
-                title: "Atomic Habits",
-                author: "James Clear",
-                category: "Pengembangan Diri",
-                price: 108000,
-                rating: "4.8 ⭐",
-                bgClass: "bg-blue"
-            },
-            {
-                id: 3,
-                title: "Mastering JavaScript",
-                author: "Eko Kurniawan",
-                category: "Teknologi",
-                price: 125000,
-                rating: "4.7 ⭐",
-                bgClass: "bg-emerald"
-            },
-            {
-                id: 4,
-                title: "Bumi Manusia",
-                author: "Pramoedya A. Toer",
-                category: "Fiksi",
-                price: 95000,
-                rating: "5.0 ⭐",
-                bgClass: "bg-rose"
-            },
-            {
-                id: 5,
-                title: "Psychology of Money",
-                author: "Morgan Housel",
-                category: "Bisnis",
-                price: 85000,
-                rating: "4.9 ⭐",
-                bgClass: "bg-purple"
-            },
-            {
-                id: 6,
-                title: "Clean Code & Refactoring",
-                author: "Robert C. Martin",
-                category: "Teknologi",
-                price: 140000,
-                rating: "4.8 ⭐",
-                bgClass: "bg-slate"
-            }
+            { id: 1, title: "Filosofi Teras", author: "Henry Manampiring", category: "Pengembangan Diri", price: 88000, rating: "4.9 ⭐", bgClass: "bg-amber" },
+            { id: 2, title: "Atomic Habits", author: "James Clear", category: "Pengembangan Diri", price: 108000, rating: "4.8 ⭐", bgClass: "bg-blue" },
+            { id: 3, title: "Mastering JavaScript", author: "Eko Kurniawan", category: "Teknologi", price: 125000, rating: "4.7 ⭐", bgClass: "bg-emerald" },
+            { id: 4, title: "Bumi Manusia", author: "Pramoedya A. Toer", category: "Fiksi", price: 95000, rating: "5.0 ⭐", bgClass: "bg-rose" },
+            { id: 5, title: "Psychology of Money", author: "Morgan Housel", category: "Bisnis", price: 85000, rating: "4.9 ⭐", bgClass: "bg-purple" },
+            { id: 6, title: "Clean Code & Refactoring", author: "Robert C. Martin", category: "Teknologi", price: 140000, rating: "4.8 ⭐", bgClass: "bg-slate" }
         ];
 
         let cart = [];
         let currentCategory = 'all';
 
-        // RENDER DAFAR BUKU
+        // Render Daftar Buku
         function renderBooks(data) {
             const grid = document.getElementById("bookGrid");
             grid.innerHTML = "";
@@ -1276,7 +538,7 @@
             });
         }
 
-        // FILTER KATEGORI
+        // Filter Kategori
         function filterCategory(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
@@ -1284,7 +546,7 @@
             filterBooks();
         }
 
-        // SEARCH & FILTER
+        // Search & Filter
         function filterBooks() {
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = books.filter(b => {
@@ -1295,7 +557,7 @@
             renderBooks(filtered);
         }
 
-        // KERANJANG BELANJA LOGIC
+        // FITUR BELI -> Masuk Ke Keranjang
         function addToCart(id) {
             const book = books.find(b => b.id === id);
             const exist = cart.find(item => item.id === id);
@@ -1307,9 +569,10 @@
             }
 
             updateCartUI();
-            showToast(`"${book.title}" ditambahkan ke keranjang!`);
+            showToast(`"${book.title}" berhasil masuk keranjang! 🛒`);
         }
 
+        // Update Tampilan Keranjang
         function updateCartUI() {
             const countEl = document.getElementById("cartCount");
             const itemsEl = document.getElementById("cartItems");
@@ -1330,7 +593,7 @@
             cart.forEach(item => {
                 itemsEl.innerHTML += `
                     <div class="cart-item">
-                        <div style="flex: 1;">
+                        <div>
                             <div class="cart-item-title">${item.title}</div>
                             <div class="cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
                             <div class="cart-controls">
@@ -1362,10 +625,10 @@
 
         function checkout() {
             if (cart.length === 0) {
-                alert("Keranjang masih kosong!");
+                alert("Keranjang kamu masih kosong!");
                 return;
             }
-            alert("Terima kasih! Pesanan Anda akan diproses.");
+            alert("Terima kasih! Pesanan kamu berhasil diproses.");
             cart = [];
             updateCartUI();
             toggleCart();
@@ -1380,7 +643,7 @@
             }, 2000);
         }
 
-        // INIT INITIAL RENDER
+        // Render Awal
         renderBooks(books);
     </script>
 </body>
